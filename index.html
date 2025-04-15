@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container" id="loginSection">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" id="registerLink">Register</a></p>
+        </div>
+
+        <div class="register-container" id="registerSection" style="display: none;">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regUsername">Username:</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="userType">User Type:</label>
+                    <select id="userType" required>
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="#" id="loginLink">Login</a></p>
+        </div>
+
+        <div id="adminDashboard" style="display: none;">
+            <div class="dashboard-header">
+                <h2>Admin Dashboard</h2>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+            <div class="admin-actions">
+                <button onclick="showInventoryManagement()">Manage Inventory</button>
+                <button onclick="showOrders()">View Orders</button>
+                <button onclick="showNotifications()">Send Notifications</button>
+            </div>
+            <div id="adminContent"></div>
+        </div>
+
+        <div id="customerDashboard" style="display: none;">
+            <div class="dashboard-header">
+                <h2>Customer Dashboard</h2>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+            <div class="customer-actions">
+                <button onclick="viewInventory()">View Inventory</button>
+                <button onclick="viewOrders()">My Orders</button>
+            </div>
+            <div id="customerContent"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

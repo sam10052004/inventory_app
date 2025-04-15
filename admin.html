@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <div id="inventory">
+        <h2>Manage Inventory</h2>
+        <input type="text" id="item" placeholder="Item Name">
+        <input type="number" id="quantity" placeholder="Quantity">
+        <button onclick="addItem()">Add Item</button>
+        <button onclick="updateItem()">Update Item</button>
+        <button onclick="deleteItem()">Delete Item</button>
+    </div>
+    <div id="orders">
+        <h2>View Orders</h2>
+        <ul id="orderList"></ul>
+    </div>
+    <div id="notify">
+        <h2>Notify Customers</h2>
+        <input type="text" id="notification" placeholder="New Item Notification">
+        <button onclick="notifyCustomers()">Notify</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

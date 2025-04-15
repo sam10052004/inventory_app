@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Customer Dashboard</title>
+</head>
+<body>
+    <h1>Customer Dashboard</h1>
+    <div id="inventory">
+        <h2>View Inventory</h2>
+        <ul id="inventoryList"></ul>
+    </div>
+    <div id="order">
+        <h2>Place Order</h2>
+        <input type="text" id="orderItem" placeholder="Item Name">
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
+    <div id="orderConfirmation"></div>
+    <script src="script.js"></script>
+</body>
+</html>
