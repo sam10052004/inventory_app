@@ -4,6 +4,10 @@ let inventory = [];
 let orders = [];
 let currentUser = null;
 
+// OTP related variables
+let currentOTP = null;
+let registrationData = null;
+
 // Load data from localStorage on page load
 document.addEventListener('DOMContentLoaded', function() {
     // Load saved credentials
@@ -69,11 +73,22 @@ const customerDashboard = document.getElementById('customerDashboard');
 const adminContent = document.getElementById('adminContent');
 const customerContent = document.getElementById('customerContent');
 
+// OTP related elements
+const otpSection = document.getElementById('otpSection');
+const otpForm = document.getElementById('otpForm');
+const resendOTPLink = document.getElementById('resendOTP');
+const backToRegisterLink = document.getElementById('backToRegister');
+
 // Event Listeners
 document.getElementById('loginForm').addEventListener('submit', handleLogin);
 document.getElementById('registerForm').addEventListener('submit', handleRegister);
 document.getElementById('registerLink').addEventListener('click', showRegister);
 document.getElementById('loginLink').addEventListener('click', showLogin);
+
+// OTP event listeners
+otpForm.addEventListener('submit', handleOTPVerification);
+resendOTPLink.addEventListener('click', resendOTP);
+backToRegisterLink.addEventListener('click', showRegister);
 
 // Functions
 function handleLogin(e) {
@@ -135,10 +150,15 @@ function handleRegister(e) {
         return;
     }
 
-    users.push({ username, email, password, type: userType });
-    saveUsers(); // Save users after registration
-    alert('Registration successful!');
-    showLogin();
+    // Store registration data temporarily
+    registrationData = { username, email, password, userType };
+    
+    // Send OTP
+    sendOTP(email);
+    
+    // Show OTP verification section
+    registerSection.style.display = 'none';
+    otpSection.style.display = 'block';
 }
 
 function isValidEmail(email) {
@@ -669,4 +689,75 @@ function exportToExcel() {
     // Trigger download
     link.click();
     document.body.removeChild(link);
+}
+
+// Generate a random 6-digit OTP
+function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Send OTP to email
+async function sendOTP(email) {
+    try {
+        const response = await fetch('http://localhost:3000/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert('OTP has been sent to your email. Please check your inbox.');
+        } else {
+            alert('Failed to send OTP. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to send OTP. Please try again.');
+    }
+}
+
+async function handleOTPVerification(e) {
+    e.preventDefault();
+    const enteredOTP = document.getElementById('otp').value;
+    const email = registrationData.email;
+
+    try {
+        const response = await fetch('http://localhost:3000/verify-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, otp: enteredOTP })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // OTP is correct, complete registration
+            users.push(registrationData);
+            saveUsers();
+            alert('Registration successful!');
+            showLogin();
+        } else {
+            // OTP is incorrect
+            alert(data.message || 'Invalid OTP. Registration failed.');
+            showLogin();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to verify OTP. Please try again.');
+    }
+
+    // Clear temporary data
+    registrationData = null;
+    otpSection.style.display = 'none';
+}
+
+function resendOTP(e) {
+    e.preventDefault();
+    if (registrationData) {
+        sendOTP(registrationData.email);
+    }
 }
