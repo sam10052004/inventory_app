@@ -320,4 +320,44 @@ a:hover {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 15px;
+}
+
+.otp-verification {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.otp-verification h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.otp-verification p {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+#otp {
+    letter-spacing: 8px;
+    font-size: 24px;
+    text-align: center;
+    padding: 10px;
+}
+
+#resendOTP,
+#backToRegister {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#resendOTP:hover,
+#backToRegister:hover {
+    text-decoration: underline;
 } 
