@@ -1,19 +1,12 @@
 // Sample data storage (in a real application, this would be a database)
-let users = [
-    { username: 'admin', email: 'admin@example.com', password: 'admin123', type: 'admin' },
-    { username: 'customer', email: 'customer@example.com', password: 'customer123', type: 'customer' }
-];
-
-let inventory = [
-    { id: 1, name: 'Mouse', price: 10, quantity: 100 },
-    { id: 2, name: 'Speaker', price: 20, quantity: 50 }
-];
-
+let users = [];
+let inventory = [];
 let orders = [];
 let currentUser = null;
 
-// Check for saved credentials on page load
+// Load data from localStorage on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Load saved credentials
     const savedUsername = localStorage.getItem('username');
     const savedPassword = localStorage.getItem('password');
     
@@ -22,7 +15,51 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('password').value = savedPassword;
         document.getElementById('rememberMe').checked = true;
     }
+
+    // Load data from localStorage
+    const savedUsers = localStorage.getItem('users');
+    const savedInventory = localStorage.getItem('inventory');
+    const savedOrders = localStorage.getItem('orders');
+
+    if (savedUsers) {
+        users = JSON.parse(savedUsers);
+    } else {
+        // Initialize with default users if no saved data
+        users = [
+            { username: 'admin', email: 'admin@example.com', password: 'admin123', type: 'admin' },
+            { username: 'customer', email: 'customer@example.com', password: 'customer123', type: 'customer' }
+        ];
+        saveUsers();
+    }
+
+    if (savedInventory) {
+        inventory = JSON.parse(savedInventory);
+    } else {
+        // Initialize with default inventory if no saved data
+        inventory = [
+            { id: 1, name: 'Mouse', price: 10, quantity: 100 },
+            { id: 2, name: 'Speaker', price: 20, quantity: 50 }
+        ];
+        saveInventory();
+    }
+
+    if (savedOrders) {
+        orders = JSON.parse(savedOrders);
+    }
 });
+
+// Save functions
+function saveUsers() {
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
+function saveInventory() {
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+}
+
+function saveOrders() {
+    localStorage.setItem('orders', JSON.stringify(orders));
+}
 
 // DOM Elements
 const loginSection = document.getElementById('loginSection');
@@ -99,6 +136,7 @@ function handleRegister(e) {
     }
 
     users.push({ username, email, password, type: userType });
+    saveUsers(); // Save users after registration
     alert('Registration successful!');
     showLogin();
 }
@@ -302,6 +340,7 @@ function updateOrderStatus(orderId, newStatus) {
     const order = orders.find(o => o.id === orderId);
     if (order) {
         order.status = newStatus;
+        saveOrders(); // Save orders after status update
         alert(`Order ${orderId} status updated to ${newStatus}`);
     }
 }
@@ -349,6 +388,7 @@ function addItem() {
             quantity
         };
         inventory.push(newItem);
+        saveInventory(); // Save inventory after adding item
         showInventoryManagement();
     }
 }
@@ -359,6 +399,7 @@ function updateItem(id) {
         const newQuantity = prompt('Enter new quantity:', item.quantity);
         if (newQuantity !== null) {
             item.quantity = parseInt(newQuantity);
+            saveInventory(); // Save inventory after updating item
             showInventoryManagement();
         }
     }
@@ -367,6 +408,7 @@ function updateItem(id) {
 function deleteItem(id) {
     if (confirm('Are you sure you want to delete this item?')) {
         inventory = inventory.filter(item => item.id !== id);
+        saveInventory(); // Save inventory after deleting item
         showInventoryManagement();
     }
 }
@@ -486,6 +528,8 @@ function placeOrder() {
     };
 
     orders.push(order);
+    saveInventory(); // Save inventory after order
+    saveOrders(); // Save orders after new order
     cart = [];
     alert('Order placed successfully!');
     viewOrders();
