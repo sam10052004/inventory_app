@@ -90,6 +90,9 @@ otpForm.addEventListener('submit', handleOTPVerification);
 resendOTPLink.addEventListener('click', resendOTP);
 backToRegisterLink.addEventListener('click', showRegister);
 
+// API base URL
+const API_BASE_URL = window.location.origin;
+
 // Functions
 function handleLogin(e) {
     e.preventDefault();
@@ -699,7 +702,7 @@ function generateOTP() {
 // Send OTP to email
 async function sendOTP(email) {
     try {
-        const response = await fetch('http://localhost:3000/send-otp', {
+        const response = await fetch(`${API_BASE_URL}/send-otp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -725,7 +728,7 @@ async function handleOTPVerification(e) {
     const email = registrationData.email;
 
     try {
-        const response = await fetch('http://localhost:3000/verify-otp', {
+        const response = await fetch(`${API_BASE_URL}/verify-otp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
